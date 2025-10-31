@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --maincolor: #1da568;
+  --secondarycolor: #f00;
+  --whitesmokecolor: #eeeeee;
+  --purewhite: #ffffff;
+  --gray: #f0f0f0;
+  --darkgray: #212129;
+  --black: #000000;
+}
+
+/* small custom utilities */
+.hero-card {
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(16, 24, 40, 0.12);
+  background: var(--maincolor) / 90;
+  overflow: hidden;
+}
+
+/* subtle page background */
+body {
+  background-color: var(--whitesmokecolor);
+}
