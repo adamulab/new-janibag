@@ -20,7 +20,7 @@ export default function Footer() {
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
-    <footer className="relative bg-darkgray text-whitesmokecolor pt-20 pb-10">
+    <footer className="relative bg-darkgray text-whitesmokecolor pt-20 pb-10 z-10 isolate">
       {/* Scroll To Top */}
       <div className="absolute top-4 right-4">
         <button
@@ -90,17 +90,6 @@ export default function Footer() {
               </Link>
             </li>
           </ul>
-
-          <div className="mt-6 space-y-4">
-            <OrderButton />
-            <Link
-              to="https://ufv9.adj.st/?adjust_deeplink=glovoapp://open?link_type=store&store_id=488812&adjust_t=s321jkn"
-              className="inline-flex items-center gap-3 px-5 py-3 rounded-full shadow-md hover:scale-105 transition-transform duration-200 font-semibold text-maincolor bg-[#FFC042] hover:bg-[#FFC042]/50"
-            >
-              <ShoppingCart size={18} />
-              Order Via GLOVO
-            </Link>
-          </div>
 
           {/* Socials */}
           <div className="mt-8">

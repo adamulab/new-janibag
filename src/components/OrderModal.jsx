@@ -2,17 +2,6 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Plus, Minus, Send } from "lucide-react";
 
-/**
- * Slide-up Order Drawer (dark translucent overlay)
- *
- * - Slide from bottom (mobile-first)
- * - Dark translucent overlay (bg-black/60)
- * - Sticky footer with total + send button
- * - Floating label inputs using peer/label technique
- *
- * Replace phoneNumber variable if needed.
- */
-
 const items = [
   { id: 1, name: "Pure Ginger Powder (250gms)", price: 3000 },
   { id: 2, name: "Tumeric Powder (250gms)", price: 1500 },
@@ -54,17 +43,14 @@ export default function OrderModal({ onClose }) {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
 
-  // disable body scroll while modal open
   useEffect(() => {
     document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    return () => (document.body.style.overflow = "");
   }, []);
 
   const toggleItem = (item) => {
-    const ex = selectedItems.find((i) => i.id === item.id);
-    if (ex) {
+    const exists = selectedItems.find((i) => i.id === item.id);
+    if (exists) {
       setSelectedItems((prev) => prev.filter((p) => p.id !== item.id));
     } else {
       setSelectedItems((prev) => [...prev, { ...item, quantity: 1 }]);
@@ -84,15 +70,13 @@ export default function OrderModal({ onClose }) {
   };
 
   const totalPrice = selectedItems.reduce(
-    (s, it) => s + it.price * it.quantity,
+    (sum, it) => sum + it.price * it.quantity,
     0
   );
 
   const sendOrder = () => {
     if (!name || !phone || !address || selectedItems.length === 0) {
-      alert(
-        "Please complete name, phone, address and select at least one item."
-      );
+      alert("Please fill in all fields and select at least one item.");
       return;
     }
 
@@ -107,16 +91,13 @@ ${orderDetails}
 Total: ₦${totalPrice}
 Name: ${name}
 Phone: ${phone}
-Address: ${address}
-`;
+Address: ${address}`;
 
-    // Replace with your phone number (country code, no +)
     const phoneNumber = "2348187050789";
-    const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-      message
-    )}`;
-
-    window.open(whatsappURL, "_blank");
+    window.open(
+      `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`,
+      "_blank"
+    );
     onClose();
   };
 
@@ -124,10 +105,10 @@ Address: ${address}
     <AnimatePresence>
       {/* Overlay */}
       <motion.div
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 bg-black/60"
         onClick={onClose}
       />
 
@@ -136,59 +117,26 @@ Address: ${address}
         initial={{ y: "100%" }}
         animate={{ y: 0 }}
         exit={{ y: "100%" }}
-        transition={{ type: "spring", stiffness: 120, damping: 20 }}
-        className="fixed left-0 right-0 bottom-0 z-50"
-        aria-modal="true"
+        transition={{ type: "spring", stiffness: 120, damping: 18 }}
+        className="fixed left-0 right-0 bottom-0 z-[9999]"
       >
         <div className="mx-auto max-w-3xl">
-          <div className="bg-purewhite rounded-t-2xl shadow-2xl overflow-hidden relative">
-            {/* header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-maincolor/10 flex items-center justify-center text-maincolor">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M3 12h18"
-                      stroke="#1DA568"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                    <path
-                      d="M3 6h18"
-                      stroke="#1DA568"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                    <path
-                      d="M3 18h18"
-                      stroke="#1DA568"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-lg font-semibold text-darkgray">
-                    Place Your Order
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    Select items & send via WhatsApp
-                  </div>
-                </div>
-              </div>
-
+          <div className="bg-white rounded-t-2xl shadow-2xl overflow-hidden">
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b bg-white sticky top-0 z-10">
+              <h3 className="text-lg font-semibold text-darkgray">
+                Place Your Order
+              </h3>
               <button
                 onClick={onClose}
-                aria-label="Close"
                 className="p-2 rounded-md text-darkgray hover:bg-gray-100"
               >
                 <X size={18} />
               </button>
             </div>
 
-            {/* content (scrollable) */}
+            {/* Scrollable Content */}
             <div className="p-4 max-h-[60vh] overflow-y-auto space-y-4">
-              {/* Product grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {items.map((item) => {
                   const selected = selectedItems.find((s) => s.id === item.id);
@@ -196,11 +144,11 @@ Address: ${address}
                     <button
                       key={item.id}
                       onClick={() => toggleItem(item)}
-                      className={`flex items-center justify-between gap-3 p-3 rounded-lg transition-shadow border ${
+                      className={`flex items-center justify-between gap-3 p-3 rounded-lg border transition-all ${
                         selected
-                          ? "bg-maincolor/5 border-maincolor"
-                          : "bg-white border-gray-100"
-                      } hover:shadow-sm`}
+                          ? "bg-maincolor/10 border-maincolor"
+                          : "bg-white border-gray-200"
+                      }`}
                     >
                       <div className="flex-1 text-left">
                         <div className="font-medium text-darkgray">
@@ -219,11 +167,11 @@ Address: ${address}
                                 e.stopPropagation();
                                 updateQuantity(item.id, -1);
                               }}
-                              className="p-1 rounded-md bg-gray-100"
+                              className="p-1 rounded bg-gray-100 hover:bg-gray-200"
                             >
                               <Minus size={14} />
                             </button>
-                            <div className="w-6 text-center">
+                            <div className="w-6 text-center font-medium">
                               {selected.quantity}
                             </div>
                             <button
@@ -231,13 +179,13 @@ Address: ${address}
                                 e.stopPropagation();
                                 updateQuantity(item.id, +1);
                               }}
-                              className="p-1 rounded-md bg-gray-100"
+                              className="p-1 rounded bg-gray-100 hover:bg-gray-200"
                             >
                               <Plus size={14} />
                             </button>
                           </>
                         ) : (
-                          <div className="text-sm text-gray-400">Add</div>
+                          <span className="text-sm text-gray-400">Add</span>
                         )}
                       </div>
                     </button>
@@ -245,14 +193,14 @@ Address: ${address}
                 })}
               </div>
 
-              {/* Form inputs */}
+              {/* User Info */}
               <div className="space-y-3">
                 <div className="relative">
                   <input
                     id="name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="peer block w-full px-3 pt-4 pb-2 border rounded-md bg-gray-50 focus:outline-none focus:ring-0"
+                    className="peer block w-full px-3 pt-4 pb-2 border rounded-md bg-gray-50 focus:border-maincolor focus:ring-0"
                     placeholder=" "
                   />
                   <label
@@ -268,14 +216,14 @@ Address: ${address}
                     id="phone"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="peer block w-full px-3 pt-4 pb-2 border rounded-md bg-gray-50 focus:outline-none focus:ring-0"
+                    className="peer block w-full px-3 pt-4 pb-2 border rounded-md bg-gray-50 focus:border-maincolor focus:ring-0"
                     placeholder=" "
                   />
                   <label
                     htmlFor="phone"
                     className="absolute left-3 top-2 text-xs text-gray-500 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-xs"
                   >
-                    Whatsapp Number (eg. 080xxxxxxx)
+                    WhatsApp Number (e.g. 080xxxxxxx)
                   </label>
                 </div>
 
@@ -284,7 +232,7 @@ Address: ${address}
                     id="address"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
-                    className="peer block w-full px-3 pt-4 pb-2 border rounded-md bg-gray-50 focus:outline-none focus:ring-0"
+                    className="peer block w-full px-3 pt-4 pb-2 border rounded-md bg-gray-50 focus:border-maincolor focus:ring-0"
                     rows={3}
                     placeholder=" "
                   />
@@ -298,9 +246,9 @@ Address: ${address}
               </div>
             </div>
 
-            {/* Sticky footer with total + send */}
-            <div className="border-t p-4 bg-white/60 backdrop-blur-md sticky bottom-0">
-              <div className="flex items-center justify-between gap-3 max-w-3xl mx-auto">
+            {/* Sticky Footer */}
+            <div className="border-t p-4 bg-white/70 backdrop-blur-md sticky bottom-0 z-20">
+              <div className="flex items-center justify-between">
                 <div>
                   <div className="text-sm text-gray-500">Total</div>
                   <div className="text-xl font-semibold text-maincolor">
@@ -311,15 +259,14 @@ Address: ${address}
                 <div className="flex items-center gap-3">
                   <button
                     onClick={sendOrder}
-                    className="inline-flex items-center gap-2 bg-maincolor text-white px-4 py-2 rounded-full shadow hover:brightness-105 transition"
+                    className="inline-flex items-center gap-2 bg-maincolor text-white px-4 py-2 rounded-full shadow hover:brightness-110 transition"
                   >
                     <Send size={16} />
-                    <span>Send via WhatsApp</span>
+                    Send via WhatsApp
                   </button>
-
                   <button
                     onClick={onClose}
-                    className="px-3 py-2 text-sm rounded-md border"
+                    className="px-3 py-2 text-sm rounded-md border hover:bg-gray-100"
                   >
                     Cancel
                   </button>
