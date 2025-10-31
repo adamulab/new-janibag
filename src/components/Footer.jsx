@@ -122,7 +122,11 @@ export default function Footer() {
               >
                 <MessageCircle className="w-5 h-5 hover:text-maincolor transition-all" />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noreferrer">
+              <a
+                href="https://www.instagram.com/janibaginger/"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <Instagram className="w-5 h-5 hover:text-maincolor transition-all" />
               </a>
             </div>
